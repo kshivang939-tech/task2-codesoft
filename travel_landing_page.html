@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Discover beautiful destinations and plan your next unforgettable journey with Wanderly Travel.">
+  <title>Wanderly — Find Your Next Escape</title>
+  <style>
+    /* ---------- Base styles ---------- */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --navy: #102b3f;
+      --teal: #087f8c;
+      --mint: #dff4ef;
+      --cream: #fbfaf7;
+      --ink: #18313d;
+      --muted: #687b82;
+      --white: #ffffff;
+      --shadow: 0 16px 40px rgba(16, 43, 63, 0.10);
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: Arial, Helvetica, sans-serif; color: var(--ink); background: var(--cream); line-height: 1.6; }
+    a { color: inherit; text-decoration: none; }
+    button, input, select { font: inherit; }
+    img { display: block; max-width: 100%; }
+    .container { width: min(1120px, 90%); margin: 0 auto; }
+
+    /* ---------- Navigation ---------- */
+    header { position: absolute; top: 0; left: 0; width: 100%; z-index: 10; color: var(--white); }
+    .navbar { min-height: 84px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .logo { font-size: 1.55rem; font-weight: 800; letter-spacing: -0.8px; }
+    .logo span { color: #73e0c2; }
+    .nav-links { display: flex; align-items: center; gap: 30px; list-style: none; }
+    .nav-links a { font-size: 0.93rem; font-weight: 600; opacity: 0.92; transition: opacity .2s; }
+    .nav-links a:hover { opacity: 1; color: #9cf0d7; }
+    .nav-cta { border: 1px solid rgba(255,255,255,.65); padding: 10px 18px; border-radius: 30px; }
+    .menu-toggle { display: none; background: transparent; color: white; border: 0; font-size: 1.8rem; cursor: pointer; }
+
+    /* ---------- Hero section ---------- */
+    .hero {
+      min-height: 690px;
+      display: flex;
+      align-items: center;
+      color: var(--white);
+      background: linear-gradient(90deg, rgba(7, 29, 44, .84) 0%, rgba(7, 29, 44, .48) 54%, rgba(7, 29, 44, .10) 100%),
+        url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=2000&q=85') center/cover no-repeat;
+    }
+    .hero-content { max-width: 690px; padding: 125px 0 80px; }
+    .eyebrow { display: inline-block; color: #a5f0da; font-size: .78rem; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 18px; }
+    h1 { font-size: clamp(2.8rem, 6.5vw, 5.25rem); line-height: 1.04; letter-spacing: -2.5px; margin-bottom: 22px; }
+    .hero p { max-width: 570px; color: rgba(255,255,255,.88); font-size: 1.08rem; margin-bottom: 32px; }
+    .button { display: inline-flex; justify-content: center; align-items: center; gap: 9px; background: var(--teal); color: white; padding: 14px 23px; border-radius: 30px; border: 0; font-weight: 700; cursor: pointer; transition: transform .2s, background .2s; }
+    .button:hover { background: #066873; transform: translateY(-2px); }
+    .button-light { background: white; color: var(--navy); }
+    .button-light:hover { background: #eaf8f4; }
+    .hero-note { display: flex; align-items: center; gap: 12px; margin-top: 32px; color: rgba(255,255,255,.9); font-size: .9rem; }
+    .avatar-stack { display: flex; }
+    .avatar-stack span { width: 29px; height: 29px; border-radius: 50%; border: 2px solid white; background: #d8a77c; margin-left: -7px; }
+    .avatar-stack span:first-child { margin-left: 0; background: #9bc5b2; }
+    .avatar-stack span:nth-child(2) { background: #e4c6a4; }
+    .avatar-stack span:nth-child(3) { background: #7da0b4; }
+
+    /* ---------- Search panel ---------- */
+    .search-wrap { margin-top: -48px; position: relative; z-index: 2; }
+    .search-panel { background: white; padding: 24px; border-radius: 18px; box-shadow: var(--shadow); display: grid; grid-template-columns: 1.3fr 1fr 1fr auto; gap: 18px; align-items: end; }
+    .field label { display: block; color: var(--muted); font-size: .76rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 7px; }
+    .field input, .field select { width: 100%; min-width: 0; border: 1px solid #e2e9e8; background: #fbfdfc; color: var(--ink); border-radius: 9px; padding: 12px; outline-color: var(--teal); }
+
+    /* ---------- General sections ---------- */
+    section { padding: 92px 0; }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 22px; margin-bottom: 32px; }
+    .section-kicker { color: var(--teal); text-transform: uppercase; font-weight: 800; letter-spacing: 2px; font-size: .75rem; }
+    h2 { font-size: clamp(2rem, 4vw, 3rem); line-height: 1.15; letter-spacing: -1px; color: var(--navy); margin-top: 8px; }
+    .section-intro { color: var(--muted); max-width: 490px; margin-top: 12px; }
+    .text-link { color: var(--teal); font-weight: 800; white-space: nowrap; }
+    .text-link:hover { text-decoration: underline; }
+
+    /* ---------- Destination cards ---------- */
+    .destinations { display: grid; grid-template-columns: repeat(3, 1fr); gap: 23px; }
+    .destination-card { overflow: hidden; background: white; border-radius: 17px; box-shadow: 0 8px 28px rgba(16,43,63,.06); transition: transform .25s, box-shadow .25s; }
+    .destination-card:hover { transform: translateY(-6px); box-shadow: var(--shadow); }
+    .destination-image { height: 245px; position: relative; overflow: hidden; }
+    .destination-image img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+    .destination-card:hover img { transform: scale(1.06); }
+    .tag { position: absolute; top: 15px; left: 15px; background: rgba(255,255,255,.94); color: var(--navy); border-radius: 30px; padding: 6px 11px; font-size: .76rem; font-weight: 800; }
+    .destination-info { padding: 20px; }
+    .destination-title { display: flex; justify-content: space-between; align-items: start; gap: 12px; }
+    .destination-title h3 { font-size: 1.25rem; color: var(--navy); }
+    .rating { color: #b77819; font-weight: 800; font-size: .9rem; white-space: nowrap; }
+    .destination-info p { color: var(--muted); font-size: .92rem; margin: 8px 0 15px; }
+    .card-bottom { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #edf0ef; padding-top: 14px; }
+    .price { color: var(--navy); font-weight: 800; }
+    .price small { display: block; font-weight: 400; color: var(--muted); font-size: .72rem; }
+
+    /* ---------- Why choose us ---------- */
+    .why { background: var(--mint); }
+    .why-grid { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 65px; }
+    .why-photo { min-height: 440px; border-radius: 20px; overflow: hidden; background: url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=1200&q=85') center/cover; position: relative; }
+    .photo-note { position: absolute; left: 22px; bottom: 22px; background: white; padding: 16px 20px; border-radius: 13px; box-shadow: var(--shadow); }
+    .photo-note strong { display: block; color: var(--navy); font-size: 1.1rem; }
+    .photo-note span { color: var(--muted); font-size: .82rem; }
+    .benefits { display: grid; gap: 22px; margin-top: 27px; }
+    .benefit { display: flex; gap: 15px; align-items: start; }
+    .benefit-icon { flex: 0 0 45px; height: 45px; border-radius: 13px; display: grid; place-items: center; background: white; font-size: 1.25rem; }
+    .benefit h3 { color: var(--navy); font-size: 1.04rem; margin-bottom: 3px; }
+    .benefit p { color: var(--muted); font-size: .91rem; }
+
+    /* ---------- Call to action and footer ---------- */
+    .cta { padding: 0 0 90px; background: var(--mint); }
+    .cta-box { background: var(--navy); border-radius: 22px; color: white; padding: 52px; display: flex; justify-content: space-between; align-items: center; gap: 30px; }
+    .cta-box h2 { color: white; max-width: 570px; }
+    .cta-box p { color: #c8d8df; margin-top: 10px; }
+    footer { background: #0b2030; color: #d7e2e7; padding: 55px 0 25px; }
+    .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1.2fr; gap: 35px; padding-bottom: 35px; }
+    .footer-brand p { color: #aebfc8; max-width: 270px; margin-top: 14px; font-size: .91rem; }
+    footer h3 { color: white; font-size: .96rem; margin-bottom: 14px; }
+    footer ul { list-style: none; display: grid; gap: 9px; }
+    footer li, footer a { color: #aebfc8; font-size: .9rem; }
+    footer a:hover { color: #8de4cc; }
+    .newsletter-form { display: flex; gap: 7px; margin-top: 10px; }
+    .newsletter-form input { width: 100%; min-width: 0; border: 1px solid #365061; background: #173246; color: white; padding: 11px; border-radius: 8px; }
+    .newsletter-form button { background: var(--teal); color: white; border: 0; border-radius: 8px; padding: 0 13px; cursor: pointer; }
+    .copyright { border-top: 1px solid #294150; padding-top: 20px; display: flex; justify-content: space-between; gap: 15px; color: #91a5b0; font-size: .82rem; }
+
+    /* ---------- Responsive layout ---------- */
+    @media (max-width: 850px) {
+      .nav-links { gap: 17px; }
+      .search-panel { grid-template-columns: 1fr 1fr; }
+      .destinations { grid-template-columns: repeat(2, 1fr); }
+      .why-grid { gap: 35px; }
+      .footer-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 620px) {
+      .navbar { min-height: 72px; }
+      .menu-toggle { display: block; }
+      .nav-links { display: none; position: absolute; top: 68px; left: 5%; right: 5%; background: var(--navy); padding: 20px; border-radius: 13px; align-items: stretch; flex-direction: column; gap: 17px; box-shadow: var(--shadow); }
+      .nav-links.open { display: flex; }
+      .nav-cta { text-align: center; }
+      .hero { min-height: 650px; background-position: 57% center; }
+      .hero-content { padding-top: 115px; }
+      h1 { letter-spacing: -1.5px; }
+      .hero p { font-size: 1rem; }
+      .search-wrap { margin-top: -30px; }
+      .search-panel { grid-template-columns: 1fr; padding: 20px; gap: 13px; }
+      section { padding: 68px 0; }
+      .section-head { align-items: start; flex-direction: column; }
+      .destinations { grid-template-columns: 1fr; }
+      .destination-image { height: 250px; }
+      .why-grid { grid-template-columns: 1fr; }
+      .why-photo { min-height: 320px; }
+      .cta { padding-bottom: 65px; }
+      .cta-box { padding: 30px 24px; align-items: start; flex-direction: column; }
+      .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+      .copyright { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="navbar container" aria-label="Main navigation">
+      <a class="logo" href="#home" aria-label="Wanderly home">wanderly<span>.</span></a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#destinations">Destinations</a></li>
+        <li><a href="#about">Why Wanderly</a></li>
+        <li><a class="nav-cta" href="#contact">Plan a trip ↗</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="container">
+        <div class="hero-content">
+          <span class="eyebrow">Your journey starts here</span>
+          <h1>Find your next<br>great escape.</h1>
+          <p>Discover places that stay with you. From peaceful mountain mornings to sunlit coastal roads, your next story is waiting to be written.</p>
+          <a class="button button-light" href="#destinations">Explore destinations <span aria-hidden="true">→</span></a>
+          <div class="hero-note">
+            <div class="avatar-stack" aria-hidden="true"><span></span><span></span><span></span></div>
+            <span>Made for curious travellers and unforgettable memories.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="search-wrap container" aria-label="Trip search demo">
+      <form class="search-panel" id="tripSearch">
+        <div class="field">
+          <label for="destination">Where to?</label>
+          <input id="destination" name="destination" type="text" placeholder="e.g. Manali, Bali">
+        </div>
+        <div class="field">
+          <label for="travelStyle">Travel style</label>
+          <select id="travelStyle" name="style">
+            <option>Adventure</option><option>Relaxation</option><option>Culture & food</option><option>Nature & wildlife</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="travelers">Travellers</label>
+          <select id="travelers" name="travelers">
+            <option>1 traveller</option><option selected>2 travellers</option><option>3–4 travellers</option><option>5+ travellers</option>
+          </select>
+        </div>
+        <button class="button" type="submit">Find a trip ↗</button>
+      </form>
+    </div>
+
+    <section id="destinations">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="section-kicker">Handpicked for you</span>
+            <h2>Places worth the journey.</h2>
+            <p class="section-intro">A little inspiration for your next adventure. Pick a place, pack your curiosity, and let the journey unfold.</p>
+          </div>
+          <a class="text-link" href="#contact">View all destinations ↗</a>
+        </div>
+        <div class="destinations">
+          <article class="destination-card">
+            <div class="destination-image"><img src="https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=900&q=80" alt="Snow-covered Himalayan mountains near Manali" loading="lazy"><span class="tag">Mountain escape</span></div>
+            <div class="destination-info"><div class="destination-title"><h3>Manali, India</h3><span class="rating">★ 4.9</span></div><p>Fresh mountain air, pine forests and scenic Himalayan views.</p><div class="card-bottom"><span class="price">From ₹8,499<small>per person · 3 days</small></span><a class="text-link" href="#contact" aria-label="Plan a trip to Manali">Explore ↗</a></div></div>
+          </article>
+          <article class="destination-card">
+            <div class="destination-image"><img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=900&q=80" alt="Tropical green landscape in Bali" loading="lazy"><span class="tag">Island life</span></div>
+            <div class="destination-info"><div class="destination-title"><h3>Bali, Indonesia</h3><span class="rating">★ 4.8</span></div><p>Tropical beaches, lush rice terraces and vibrant local culture.</p><div class="card-bottom"><span class="price">From ₹32,999<small>per person · 5 days</small></span><a class="text-link" href="#contact" aria-label="Plan a trip to Bali">Explore ↗</a></div></div>
+          </article>
+          <article class="destination-card">
+            <div class="destination-image"><img src="https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=900&q=80" alt="Colourful coastal village along the Italian Riviera" loading="lazy"><span class="tag">Coastal charm</span></div>
+            <div class="destination-info"><div class="destination-title"><h3>Italian Riviera</h3><span class="rating">★ 4.9</span></div><p>Colourful seaside towns, winding lanes and unforgettable sunsets.</p><div class="card-bottom"><span class="price">From ₹59,999<small>per person · 6 days</small></span><a class="text-link" href="#contact" aria-label="Plan a trip to Italian Riviera">Explore ↗</a></div></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="why" id="about">
+      <div class="container why-grid">
+        <div class="why-photo" role="img" aria-label="A beautiful lake surrounded by mountains"><div class="photo-note"><strong>More than a holiday.</strong><span>A collection of moments to remember.</span></div></div>
+        <div>
+          <span class="section-kicker">The Wanderly difference</span>
+          <h2>Travel thoughtfully.<br>Feel more alive.</h2>
+          <p class="section-intro">Great travel isn't just about where you go. It's about the people you meet, the details you notice, and the memories you bring home.</p>
+          <div class="benefits">
+            <div class="benefit"><div class="benefit-icon" aria-hidden="true">✦</div><div><h3>Trips with personality</h3><p>Discover experiences that fit your interests, pace and travel style.</p></div></div>
+            <div class="benefit"><div class="benefit-icon" aria-hidden="true">♡</div><div><h3>Thoughtful planning</h3><p>Clear itineraries and helpful details make planning feel simpler.</p></div></div>
+            <div class="benefit"><div class="benefit-icon" aria-hidden="true">⌁</div><div><h3>Local-first experiences</h3><p>Find the flavours, stories and hidden corners that make a place special.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta" id="contact">
+      <div class="container">
+        <div class="cta-box">
+          <div><span class="eyebrow">Your next chapter awaits</span><h2>Somewhere new is calling.</h2><p>Start planning a trip you'll be talking about for years.</p></div>
+          <a class="button button-light" href="mailto:hello@wanderly.example?subject=Help%20planning%20a%20trip">Let's plan together ↗</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand"><a class="logo" href="#home">wanderly<span>.</span></a><p>Thoughtful travel inspiration for curious people and meaningful journeys.</p></div>
+        <div><h3>Explore</h3><ul><li><a href="#destinations">Destinations</a></li><li><a href="#about">Our approach</a></li><li><a href="#contact">Plan a trip</a></li></ul></div>
+        <div><h3>Good to know</h3><ul><li><a href="#contact">Travel tips</a></li><li><a href="#contact">FAQs</a></li><li><a href="#contact">Contact us</a></li></ul></div>
+        <div><h3>Get travel inspiration</h3><p style="color:#aebfc8;font-size:.9rem">Occasional ideas for your next escape.</p><form class="newsletter-form" id="newsletter"><input type="email" id="email" placeholder="Your email address" aria-label="Your email address" required><button type="submit" aria-label="Subscribe">→</button></form></div>
+      </div>
+      <div class="copyright"><span>© 2026 Wanderly Travel. Developed by Shivang Kumar · BTech CSE Internship Task.</span><span>Made for the love of exploring.</span></div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile navigation toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+    menuToggle.addEventListener('click', () => {
+      const isOpen = navLinks.classList.toggle('open');
+      menuToggle.setAttribute('aria-expanded', isOpen);
+      menuToggle.setAttribute('aria-label', isOpen ? 'Close navigation' : 'Open navigation');
+      menuToggle.textContent = isOpen ? '×' : '☰';
+    });
+    navLinks.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+      menuToggle.setAttribute('aria-label', 'Open navigation');
+      menuToggle.textContent = '☰';
+    }));
+
+    // Demo search: this landing page does not connect to a booking service.
+    document.getElementById('tripSearch').addEventListener('submit', event => {
+      event.preventDefault();
+      const destination = document.getElementById('destination').value.trim();
+      const style = document.getElementById('travelStyle').value;
+      const travelers = document.getElementById('travelers').value;
+      if (!destination) {
+        alert('Please enter a destination to start exploring.');
+        document.getElementById('destination').focus();
+        return;
+      }
+      alert(`Great choice! Your demo search is ready.\nDestination: ${destination}\nTravel style: ${style}\nTravellers: ${travelers}\n\nThis student project is a front-end demo; no booking is made.`);
+    });
+
+    // Demo newsletter interaction; no email is sent or stored.
+    document.getElementById('newsletter').addEventListener('submit', event => {
+      event.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      alert(`Thanks! ${email} has been entered for this demo. No email was sent or stored.`);
+      event.target.reset();
+    });
+  </script>
+</body>
+</html>
